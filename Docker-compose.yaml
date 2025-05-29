@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  hydra_db:
+    labels:
+      - maintainer="Mohsen Taher"
+      - version="v1.0.0"
+      - description="com.x-app.infra"
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    container_name: hydra_db
+    hostname: hydra_db
+    ports:
+      - "5432:5432"
+  hydra:
+    build:
+      context: ./hydra
+      dockerfile: Dockerfile
+    container_name: hydra
+    ports:
+      - "4444:4444"
+      - "4445:4445"
+      - "5555:5555"
+    restart: unless-stopped
+    depends_on:
+      - hydra-migrate
+  hydra-migrate:
+    image: oryd/hydra:latest
+    container_name: hydra-migrate
+    environment:
+      - DSN=postgres://root:123456@hydra_db:5432/hydra?sslmode=disable&max_conns=20&max_idle_conns=4
+    command:
+      migrate sql -e --yes
+    restart: on-failure

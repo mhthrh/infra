@@ -1,0 +1,10 @@
+create database db_test;
+create database hydra;
+CREATE USER test WITH PASSWORD 'test@123';
+GRANT ALL PRIVILEGES ON DATABASE db_test TO test;
+create user hydra_manager with password 'hydraPass';
+grant all privileges on database hydra to hydra_manager;
+GRANT USAGE ON SCHEMA public TO hydra_manager;
+GRANT CREATE ON SCHEMA public TO hydra_manager;
+CREATE ROLE admin_role WITH LOGIN PASSWORD '123456';
+ALTER ROLE admin_role WITH SUPERUSER;
