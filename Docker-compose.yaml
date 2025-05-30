@@ -9,6 +9,9 @@ services:
     build:
       context: ./db
       dockerfile: Dockerfile
+      args:
+        DB_USER: ${DB_USER}
+        DB_PASSWORD: ${DB_PASSWORD}
     container_name: hydra_db
     hostname: hydra_db
     ports:
@@ -17,6 +20,10 @@ services:
     build:
       context: ./hydra
       dockerfile: Dockerfile
+      args:
+        DB_USER: ${DB_USER}
+        DB_PASSWORD: ${DB_PASSWORD}
+        DB_SCHEMA: ${DB_SCHEMA}
     container_name: hydra
     ports:
       - "4444:4444"
@@ -29,7 +36,7 @@ services:
     image: oryd/hydra:latest
     container_name: hydra-migrate
     environment:
-      - DSN=postgres://root:123456@hydra_db:5432/hydra?sslmode=disable&max_conns=20&max_idle_conns=4
+      - DSN=postgres://${DB_USER}:${DB_PASSWORD}@hydra_db:5432/${DB_SCHEMA}?sslmode=disable&max_conns=20&max_idle_conns=4
     command:
       migrate sql -e --yes
     restart: on-failure

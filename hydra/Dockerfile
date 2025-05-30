@@ -1,11 +1,14 @@
 FROM oryd/hydra:latest
 
+ARG DB_USER
+ARG DB_PASSWORD
+ARG DB_SCHEMA
 
 ENV URLS_SELF_ISSUER=http://127.0.0.1:4444
 ENV URLS_CONSENT=http://127.0.0.1:8000/consent
 ENV URLS_LOGIN=http://127.0.0.1:8000/login
 ENV URLS_LOGOUT=http://127.0.0.1:8000/logout
-ENV DSN=postgres://root:123456@db_host:5432/hydra?sslmode=disable
+ENV DSN=postgres://$DB_USER:$DB_PASSWORD@db_host:5432/$DB_SCHEMA?sslmode=disable
 ENV SECRETS_SYSTEM=youReallyNeedToChangeThis
 ENV OIDC_SUBJECT_IDENTIFIERS_SUPPORTED_TYPES=public,pairwise
 ENV OIDC_SUBJECT_IDENTIFIERS_PAIRWISE_SALT=youReallyNeedToChangeThis
